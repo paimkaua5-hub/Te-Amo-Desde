@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Nosso Tempo ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+/* 🌈 Fundo */
+.background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #ff7eb3, #ff758c, #ff7eb3);
+  background-size: 300% 300%;
+  animation: bg 10s infinite;
+  z-index: -2;
+}
+
+@keyframes bg {
+  0% {background-position: 0%}
+  50% {background-position: 100%}
+  100% {background-position: 0%}
+}
+
+/* 🌸 Flores grandes */
+.flower {
+  position: fixed;
+  font-size: 90px;
+  opacity: 0.9;
+  z-index: 1;
+}
+
+.tl {top: 10px; left: 10px;}
+.tr {top: 10px; right: 10px;}
+.bl {bottom: 10px; left: 10px;}
+.br {bottom: 10px; right: 10px;}
+
+/* 💖 Tela inicial */
+.start {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  z-index: 3;
+  position: relative;
+}
+
+.start span {
+  font-size: 100px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.start span:hover {
+  transform: scale(1.2);
+}
+
+/* 💬 Frases */
+.message {
+  position: absolute;
+  width: 100%;
+  top: 40%;
+  text-align: center;
+  font-size: 2rem;
+  animation: fade 3s forwards;
+  z-index: 3;
+}
+
+@keyframes fade {
+  0% {opacity:0; transform:translateY(20px);}
+  50% {opacity:1;}
+  100% {opacity:0; transform:translateY(-20px);}
+}
+
+/* 💕 Corações */
+.heart {
+  position: fixed;
+  top: -10px;
+  z-index: 0;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+/* ⏱️ Timer */
+.main {
+  display: none;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 2;
+  position: relative;
+}
+
+.container {
+  background: rgba(0,0,0,0.35);
+  padding: 30px;
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+}
+
+.timer {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.box {
+  background: rgba(255,255,255,0.2);
+  padding: 15px;
+  border-radius: 10px;
+  min-width: 80px;
+}
+
+.number {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.label {
+  font-size: 0.8rem;
+}
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<!-- 🌸 Flores -->
+<div class="flower tl">🌸</div>
+<div class="flower tr">🌸</div>
+<div class="flower bl">🌸</div>
+<div class="flower br">🌸</div>
+
+<!-- 💖 Início -->
+<div class="start" id="start">
+  <span onclick="start()">❤️</span>
+</div>
+
+<!-- 💬 mensagens -->
+<div id="messages"></div>
+
+<!-- ⏱️ Timer -->
+<div class="main" id="main">
+  <div class="container">
+    <h1>Desde que começamos ❤️</h1>
+    <div class="timer">
+      <div class="box"><div id="years" class="number"></div><div class="label">Anos</div></div>
+      <div class="box"><div id="months" class="number"></div><div class="label">Meses</div></div>
+      <div class="box"><div id="days" class="number"></div><div class="label">Dias</div></div>
+      <div class="box"><div id="hours" class="number"></div><div class="label">Horas</div></div>
+      <div class="box"><div id="minutes" class="number"></div><div class="label">Minutos</div></div>
+      <div class="box"><div id="seconds" class="number"></div><div class="label">Segundos</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const startDate = new Date("2026-05-05T17:55:00");
+
+let phase = 1;
+
+/* 💕 Criar corações */
+function createHeart() {
+  const h = document.createElement("div");
+  h.className = "heart";
+
+  // troca estilo dependendo da fase
+  if (phase === 1) {
+    h.innerHTML = "🤍";
+  } else {
+    h.innerHTML = "💖";
+  }
+
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = (Math.random() * 25 + 15) + "px";
+  h.style.animationDuration = (Math.random() * 3 + 2) + "s";
+
+  document.body.appendChild(h);
+
+  setTimeout(() => h.remove(), 6000);
+}
+
+/* MUITOS corações */
+setInterval(createHeart, 60);
+
+/* 💬 Frases */
+const frases = [
+  "Tudo começou com você...",
+  "E desde então...",
+  "Tudo ficou mais bonito 💖",
+  "Você mudou minha vida...",
+  "E eu escolheria você sempre ❤️"
+];
+
+function start() {
+  document.getElementById("start").style.display = "none";
+
+  let i = 0;
+
+  function nextMsg() {
+    if (i >= frases.length) {
+      phase = 2;
+      document.getElementById("main").style.display = "flex";
+      return;
+    }
+
+    const m = document.createElement("div");
+    m.className = "message";
+    m.innerText = frases[i];
+
+    document.getElementById("messages").appendChild(m);
+
+    i++;
+    setTimeout(() => {
+      m.remove();
+      nextMsg();
+    }, 3000);
+  }
+
+  nextMsg();
+}
+
+/* ⏱️ Timer */
+function updateTimer() {
+  const now = new Date();
+  let diff = now - startDate;
+
+  let s = Math.floor(diff / 1000);
+  let m = Math.floor(s / 60);
+  let h = Math.floor(m / 60);
+  let d = Math.floor(h / 24);
+
+  let y = Math.floor(d / 365);
+  let mo = Math.floor((d % 365) / 30);
+
+  document.getElementById("years").innerText = y;
+  document.getElementById("months").innerText = mo;
+  document.getElementById("days").innerText = d % 30;
+  document.getElementById("hours").innerText = h % 24;
+  document.getElementById("minutes").innerText = m % 60;
+  document.getElementById("seconds").innerText = s % 60;
+}
+
+setInterval(updateTimer, 1000);
+updateTimer();
+</script>
+
+</body>
+</html>
